@@ -1,0 +1,14 @@
+.idea/
+logs/
+saved_model/
+saved_rewards
+
+*.pkl
+
+# Byte-compiled / optimized / DLL files
+__pycache__
+*.py[cod]
+*$py.class
+
+# Unit tests
+.pytest_cache/
