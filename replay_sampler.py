@@ -7,17 +7,14 @@ sys.path.append('.')
 from dotaenv import DotaEnvironment
 import pickle
 import argparse
-import math
-import numpy as np
-
-filename = 'replays/1.pickle'
+import os
 
 
 def transform_into_pair(state):
     return state[:83], state[83:]
 
 
-def record():
+def record(filename):
     env = DotaEnvironment()
 
     state = env.reset()
@@ -31,33 +28,31 @@ def record():
         pickle.dump(states, output_file)
 
 
-def print_out():
+def print_out(filename):
     with open(filename, 'rb') as input_file:
         states = pickle.load(input_file)
 
     for state in states:
         observe, actions = state
-        print('observe', observe[[0,1,2,11,12,19,20]])
+        print('observe', observe[[0, 1, 2, 11, 12, 19, 20]])
         print('actions', actions)
     print(len(states))
-    return
 
-    cnt = 0
-    last_state = np.array([0, 0, 0])
-    for state in states:
-        if np.all(state == last_state):
-            continue
-        cnt += 1
-        diff = np.array(state[:2]) - np.array(last_state[:2])
-        print(state, 'diff is', diff)
-        angle_pi = math.atan2(diff[1], diff[0])
-        if angle_pi < 0:
-            angle_pi += 2 * math.pi
-        print(angle_pi / math.pi * 180)
-        last_state = state
-    print('Overall cnt is', cnt)
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('replay_name')
+    parser.add_argument('--record', action='store_true', help='Records your actions in the game')
+    parser.add_argument('--print', action='store_true', help='Print the recorded actions')
+    args = parser.parse_args()
 
-# record()
-print_out()
+    filename = os.path.join('replays/', args.replay_name)
+
+    if args.record:
+        record(filename)
+    if args.print:
+        print_out(filename)
+
+
+if __name__ == '__main__':
+    main()
