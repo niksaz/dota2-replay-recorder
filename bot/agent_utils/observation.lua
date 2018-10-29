@@ -180,7 +180,7 @@ function Observation.is_done()
     if GetGameState() == GAME_STATE_POST_GAME or
             GetHeroKills(bot_player_id) > 0 or
             GetHeroDeaths(bot_player_id) > 0 or
-            DotaTime() > 120 then
+            DotaTime() > 100 then
         _end = true
         print('Bot: the game has ended.')
     end
